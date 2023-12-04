@@ -1,0 +1,40 @@
+% SnakeGame.m
+function SnakeGame()
+    % Main game script
+
+    % Set up initial parameters
+    gridSize = 30;
+    snakeLength = 3;
+
+    % Initialize game variables
+    snake = initializeSnake(snakeLength);
+
+    % Create figure and set up axes
+    fig = figure('KeyPressFcn', @(src, event) keyPress(src, event), 'Name', 'Snake Game', 'NumberTitle', 'off');
+    axes('XLim', [1 gridSize], 'YLim', [1 gridSize], 'XTick', [], 'YTick', [], 'Color', 'blue');
+
+    % Set initial direction
+    direction = [0, 1];  % Initial direction is to the right
+
+    % Main game loop
+    while ishandle(fig)
+        % Check for key presses
+        key = get(fig, 'CurrentKey');
+        direction = getDirection(key);
+
+        % Update snake position
+        snake = moveSnake(snake, direction);
+
+        % Check for collisionends
+        if checkCollision(snake, gridSize)
+            gameOver();
+            return;
+        end
+
+        % Update display
+        drawSnake(snake);
+
+        % Pause to control the speed of the game
+        pause(0.2);
+    end
+
